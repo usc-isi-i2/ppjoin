@@ -7,9 +7,7 @@ This repository is based on https://github.com/teh/ppjoin
 `ppjoin` function takes datasets from different parties and a threshold `t` as input.
 
 ```
-from ppjoin import ppjoin
-
-ppjoin(dataset1, dataset2, dataset2, t=0.5)
+ppjoin(*datasets, t=0.5)
 ```
 
 Each dataset is a list of string records.
