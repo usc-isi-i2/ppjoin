@@ -102,7 +102,7 @@ def normalize_words(words):
     wwi = map(lambda ws: [x + "@#" + str(i) for i, x in enumerate(ws)], tmp)
     return [w for same_words in wwi for w in same_words]
              
-def ppjoin(datasets:List[List[str]], t:int=0) -> Set[Tuple[Tuple]]:
+def ppjoin(datasets:List[List[str]], t:float=0) -> Set[Tuple[Tuple]]:
 
     ret = set()
     if not datasets:

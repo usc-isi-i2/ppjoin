@@ -7,7 +7,7 @@ This repository is based on https://github.com/teh/ppjoin
 `ppjoin` function takes a list of datasets from different parties and a threshold `t` as input. Each dataset is a list of string records.
 
 ```
-ppjoin(datasets:List[List[str]], t:int=0) -> Set[Tuple[Tuple]]
+ppjoin(datasets:List[List[str]], t:float=0) -> Set[Tuple[Tuple]]
 ```
 
 The return will be a set of tuples and each tuple contains two inner tuples:
