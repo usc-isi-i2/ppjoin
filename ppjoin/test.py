@@ -1,11 +1,15 @@
 from ppjoin import ppjoin
 
-ds1 = ['a b d', 'a b c', 'h k']
-ds2 = ['a b k', 'a b', 'h k', 'a c h']
-ds3 = ['a c h']
+ds0 = ['a b d', 'a b c', 'h k']
+ds1 = ['a b k', 'a b', 'h k', 'a c h']
+ds2 = ['a c h']
+ds = [ds0, ds1, ds2]
 
-print(ppjoin(ds1, ds2, ds3, t=0.5))
-# it returns {((1, 3), (2, 0)), ((0, 2), (1, 2))}
-# which means two pairs found:
-# first is 'a c h' from ds2 and 'a c h' from ds3
-# second is 'h k' from ds1 and 'h k' from ds2
+result = ppjoin(ds, t=0.5)
+
+for r in result:
+    ds1_id, r1id = r[0]
+    ds2_id, r2id = r[1]
+    print('Found pair: {} from dataset {}, {} from dataset {}'.format(
+        ds[ds1_id][r1id], ds1_id, ds[ds2_id][r2id], ds2_id
+    ))

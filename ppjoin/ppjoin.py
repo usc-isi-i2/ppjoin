@@ -10,6 +10,7 @@ import re
 import collections
 import math
 from itertools import groupby
+from typing import List, Tuple, Set
 
 def prefix_length(s, threshold):
     return len(s) - int(math.ceil(threshold*len(s))) + 1
@@ -101,14 +102,16 @@ def normalize_words(words):
     wwi = map(lambda ws: [x + "@#" + str(i) for i, x in enumerate(ws)], tmp)
     return [w for same_words in wwi for w in same_words]
              
-def ppjoin(*datasets, t=0):
+def ppjoin(datasets:List[List[str]], t:int=0) -> Set[Tuple[Tuple]]:
 
     ret = set()
+    if not datasets:
+        return ret
     if not t:
         return ret
 
-    dataset_id_offset = [0]
     dataset = []
+    dataset_id_offset = [0]
     for d in datasets:
         dataset += d
         dataset_id_offset.append(len(d) + dataset_id_offset[-1])
@@ -129,7 +132,7 @@ def ppjoin(*datasets, t=0):
         # both are from one source
         if ds1_offset == ds2_offset:
             continue
-            
+
         ret.add( (
             (dataset_id_offset.index(ds1_offset), r1id-ds1_offset), 
             (dataset_id_offset.index(ds2_offset), r2id-ds2_offset)) )
