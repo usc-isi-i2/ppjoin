@@ -23,7 +23,7 @@ def jaccard(a, b):
     return 1.0 * len(a & b) / len(a | b)
 
 
-def candidate_pairs(records, t):
+def candidate_pairs(records, t, order_map):
     """
     Implementation of ppjoin with slight variations from:
 
@@ -66,20 +66,21 @@ def candidate_pairs(records, t):
             wy = yr[yp - 1]
             alpha = overlap_constraint(len(xr), len(yr), t)
             rest = 0
-            if wx < wy:
-                ubound = overlap + len(yr) - yp
-                if ubound >= alpha:
-                    rest = len(set(xr[overlap:]) & set(yr[yp:]))
-            else:
+
+            if order_map[wx] < order_map[wy]:
                 ubound = overlap + len(xr) - xp
                 if ubound >= alpha:
                     rest = len(set(yr[overlap:]) & set(xr[xp:]))
+            else:
+                ubound = overlap + len(yr) - yp
+                if ubound >= alpha:
+                    rest = len(set(xr[overlap:]) & set(yr[yp:]))
 
             # i, j = xp - 1, yp - 1
             # while i >= 0 and j >= 0:
             #     wx = xr[i]
             #     wy = yr[j]
-            #     if wx <= wy:
+            #     if order_map[wx] <= order_map[wy]:
             #         try:
             #             j = yr[:yp].index(wx)
             #             break
@@ -91,6 +92,7 @@ def candidate_pairs(records, t):
             #             break
             #         except:
             #             j -= 1
+            # rest = len(set(xr[i:]) & set(yr[j:]))
 
             overlap += rest
             if overlap >= alpha:
@@ -110,12 +112,12 @@ def prepare_strings(records):
     elements = list(y for r in records for y in r)
     order_map = dict(
         (el, i)
-        for i, (el, count) in enumerate(sorted(collections.Counter(elements).items(), key=lambda x:x[1]))
+        for i, (el, count) in enumerate(sorted(collections.Counter(elements).items(), key=lambda x: (x[1], x[0])))
     )
 
     records_sorted = [sorted(x, key=lambda x: order_map[x]) for x in records]
 
-    return records, records_sorted, argsort
+    return records_sorted, argsort, order_map
 
 
 def normalize_words(words):
@@ -156,11 +158,13 @@ def ppjoin(datasets: List[List[List[str]]], t: float = 0) -> Set[Tuple[Tuple]]:
     if len(dataset_id_offset) > 1:
         dataset_id_offset = dataset_id_offset[:-1]
  
-    _, sorted_preprocessed, original_order = prepare_strings(dataset)
-    result = candidate_pairs(sorted_preprocessed, t)
+    records_sorted, original_order, order_map = prepare_strings(dataset)
+    result = candidate_pairs(records_sorted, t, order_map)
     for r in result:
         r1id, r2id = r[0], r[1]
         r1id, r2id = original_order[r1id], original_order[r2id]
+        if r1id == r2id:
+            continue
 
         # r1id should <= r2id
         if r1id > r2id:
@@ -169,9 +173,8 @@ def ppjoin(datasets: List[List[List[str]]], t: float = 0) -> Set[Tuple[Tuple]]:
         ds1_offset = next(x for x in reversed(dataset_id_offset) if x <= r1id)
         ds2_offset = next(x for x in reversed(dataset_id_offset) if x <= r2id)
         # both are from one source (except only one dataset is provided)
-        if ds1_offset == ds2_offset:
-            if len(dataset_id_offset) > 1:
-                continue
+        if len(dataset_id_offset) > 1 and ds1_offset == ds2_offset:
+            continue
 
         ret.add( (
             (dataset_id_offset.index(ds1_offset), r1id-ds1_offset), 
