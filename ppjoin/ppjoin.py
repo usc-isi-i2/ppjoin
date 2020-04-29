@@ -2,21 +2,27 @@
 Copyright 2012 Thomas Hunger. All rights reserved.
 Licenced under the 2-clause BSD license ("Simplified BSD License" or "FreeBSD License")
 Code taken from https://github.com/teh/ppjoin
-"""
 
-# import re
+Update:
+Fixed several severe bugs
+https://github.com/usc-isi-i2/PPER
+"""
 import collections
 import math
 from itertools import groupby, product
 from typing import List, Tuple, Set
 
 
+def ceil(x):
+    return math.ceil(float('%.10f' % x))
+
+
 def prefix_length(s, threshold):
-    return len(s) - math.ceil(threshold*len(s)) + 1
+    return len(s) - ceil(threshold*len(s)) + 1
 
 
 def overlap_constraint(len_s1, len_s2, threshold):
-    return math.ceil(threshold / (1.0 + threshold) * (len_s1 + len_s2))
+    return ceil(threshold / (1.0 + threshold) * (len_s1 + len_s2))
 
 
 def jaccard(a, b):
@@ -24,11 +30,6 @@ def jaccard(a, b):
 
 
 def candidate_pairs(records, t, order_map):
-    """
-    Implementation of ppjoin with slight variations from:
-
-    http://www.cse.unsw.edu.au/~weiw/files/TODS-PPJoin-Final.pdf
-    """
     ii = collections.defaultdict(set)  # inverted index
     cp = set()  # candidate pairs
 
