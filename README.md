@@ -2,11 +2,13 @@
 
 PPJoin and P4Join Python 3 implementation.
 
-## PPjoin
+## PPJoin
 
-This repository is based on https://github.com/teh/ppjoin
+PPJoin is introduced from
 
-## Usage
+> Xiao, Chuan, et al. "Efficient similarity joins for near-duplicate detection." ACM Transactions on Database Systems (TODS) 36.3 (2011): 1-41.
+
+> This implementation is based on https://github.com/teh/ppjoin.
 
 `ppjoin` function takes a list of datasets from different parties and a threshold `t` as input. 
 Each dataset is a list of records and each record is formed by list of tokens.
@@ -24,15 +26,15 @@ The return will be a set of tuples and each tuple contains two inner tuples:
 Example:
 
 ```
-from ppjoin import ppjoin, whitespace_tokenizer
+import ppjoin
 
 ds0 = ['a b d', 'a b c', 'h k']
 ds1 = ['a b k', 'a b', 'h k', 'a c h']
 ds2 = ['a c h']
 ds = [
-    [whitespace_tokenizer(w) for w in ds0],
-    [whitespace_tokenizer(w) for w in ds1],
-    [whitespace_tokenizer(w) for w in ds2]
+    [ppjoin.whitespace_tokenizer(w) for w in ds0],
+    [ppjoin.whitespace_tokenizer(w) for w in ds1],
+    [ppjoin.whitespace_tokenizer(w) for w in ds2]
 ]
 
 
@@ -57,4 +59,14 @@ Found pair: ['a', 'b', 'd'] from dataset 0, ['a', 'b'] from dataset 1
 Found pair: ['a', 'b', 'c'] from dataset 0, ['a', 'c', 'h'] from dataset 1
 Found pair: ['a', 'c', 'h'] from dataset 1, ['a', 'c', 'h'] from dataset 2
 Found pair: ['a', 'b', 'c'] from dataset 0, ['a', 'b'] from dataset 1
+```
+
+## P4Join
+
+TBD
+
+## Test
+
+```
+python -m unittest discover ppjoin/tests
 ```
