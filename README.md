@@ -1,5 +1,9 @@
 # PPJoin
 
+PPJoin and P4Join Python 3 implementation.
+
+## PPjoin
+
 This repository is based on https://github.com/teh/ppjoin
 
 ## Usage
@@ -8,7 +12,7 @@ This repository is based on https://github.com/teh/ppjoin
 Each dataset is a list of records and each record is formed by list of tokens.
 
 ```
-ppjoin(datasets: List[List[List[str]]], t: float = 0) -> Set[Tuple[Tuple]]
+ppjoin(datasets: List[List[List[str]]], t: float) -> Set[Tuple[Tuple]]
 ```
 
 The return will be a set of tuples and each tuple contains two inner tuples:

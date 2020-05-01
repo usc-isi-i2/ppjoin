@@ -1,6 +1,6 @@
 import unittest
 import collections
-from ppjoin import ppjoin, jaccard, whitespace_tokenizer
+import ppjoin
 
 
 class TestPPJoin(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestPPJoin(unittest.TestCase):
             for r2id, r2 in enumerate(ds):
                 if r1id >= r2id:
                     continue
-                score = jaccard(r1, r2)
+                score = ppjoin.jaccard(r1, r2)
                 if score < t:
                     continue
                 result.add(str(r1id) + '-' + str(r2id))
@@ -21,7 +21,7 @@ class TestPPJoin(unittest.TestCase):
     @staticmethod
     def run_ppjoin(ds, t):
         result = set()
-        ppjoin_result = ppjoin(ds, t=t)
+        ppjoin_result = ppjoin.ppjoin(ds, t=t)
         for r in ppjoin_result:
             ds1_id, r1id = r[0]
             ds2_id, r2id = r[1]
@@ -39,7 +39,7 @@ class TestPPJoin(unittest.TestCase):
 
         datasets = []
         for ds in raw_datasets:
-            datasets.append([set(whitespace_tokenizer(r)) for r in ds])
+            datasets.append([set(ppjoin.whitespace_tokenizer(r)) for r in ds])
 
         for ds in datasets:
             for t in range(0, 11):
