@@ -1,12 +1,17 @@
 import ppjoin
 
+
+def tokenizer(record):
+    return ppjoin.whitespace_tokenizer(record.lower())
+
+
 ds0 = ['a b d', 'a b c', 'h k']
 ds1 = ['a b k', 'a b', 'h k', 'a c h']
 ds2 = ['a c h']
 ds = [
-    [ppjoin.whitespace_tokenizer(w) for w in ds0],
-    [ppjoin.whitespace_tokenizer(w) for w in ds1],
-    [ppjoin.whitespace_tokenizer(w) for w in ds2]
+    [tokenizer(w) for w in ds0],
+    [tokenizer(w) for w in ds1],
+    [tokenizer(w) for w in ds2]
 ]
 
 
