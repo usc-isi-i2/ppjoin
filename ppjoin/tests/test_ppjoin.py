@@ -1,17 +1,29 @@
 import unittest
 import collections
+import csv
 import ppjoin
 
 
 class TestPPJoin(unittest.TestCase):
 
     @staticmethod
-    def run_jaccard(ds, t):
+    def run_jaccard_single_ds(ds, t):
         result = set()
         for r1id, r1 in enumerate(ds):
             for r2id, r2 in enumerate(ds):
                 if r1id >= r2id:
                     continue
+                score = ppjoin.jaccard(r1, r2)
+                if score < t:
+                    continue
+                result.add(str(r1id) + '-' + str(r2id))
+        return result
+
+    @staticmethod
+    def run_jaccard_two_ds(ds, t):
+        result = set()
+        for r1id, r1 in enumerate(ds[0]):
+            for r2id, r2 in enumerate(ds[1]):
                 score = ppjoin.jaccard(r1, r2)
                 if score < t:
                     continue
@@ -28,6 +40,14 @@ class TestPPJoin(unittest.TestCase):
             result.add(str(r1id) + '-' + str(r2id))
         return result
 
+    @staticmethod
+    def ws_tokenizer(r):
+        return set(ppjoin.whitespace_tokenizer(r.lower()))
+
+    @staticmethod
+    def trigram_tokenizer(r):
+        return set(ppjoin.qgram_tokenizer(r.lower(), 3, True))
+
     def test_correctness(self):
         raw_datasets = [
             ['a b d', 'a b c', 'h k', 'a b k', 'a b', 'h k', 'a c h', 'a c h'],
@@ -39,14 +59,14 @@ class TestPPJoin(unittest.TestCase):
 
         datasets = []
         for ds in raw_datasets:
-            datasets.append([set(ppjoin.whitespace_tokenizer(r)) for r in ds])
+            datasets.append([self.ws_tokenizer(r) for r in ds])
 
         for ds in datasets:
             for t in range(0, 11):
                 t = float(t) / 10
 
                 merged_result = collections.defaultdict(lambda: [None, None])
-                for r in self.run_jaccard(ds, t):
+                for r in self.run_jaccard_single_ds(ds, t):
                     merged_result[r][0] = True
                 for r in self.run_ppjoin([ds], t):
                     merged_result[r][1] = True
@@ -54,8 +74,27 @@ class TestPPJoin(unittest.TestCase):
                 for k, r in merged_result.items():
                     assert r[0] == r[1]
 
-    def test_multi_party(self):
-        pass
+    def test_on_real_dataset(self):
+        abt, buy = [], []
+        with open('datasets/Abt.csv', encoding='latin-1') as f:
+            for line in csv.DictReader(f):
+                abt.append(self.ws_tokenizer(line['name']))
+        with open('datasets/Buy.csv', encoding='latin-1') as f:
+            for line in csv.DictReader(f):
+                abt.append(self.ws_tokenizer(line['name']))
+        ds = [abt, buy]
+
+        for t in range(0, 11):
+            t = float(t) / 10
+
+            merged_result = collections.defaultdict(lambda: [None, None])
+            for r in self.run_jaccard_two_ds(ds, t):
+                merged_result[r][0] = True
+            for r in self.run_ppjoin(ds, t):
+                merged_result[r][1] = True
+
+            for k, r in merged_result.items():
+                assert r[0] == r[1]
 
 
 if __name__ == '__main__':

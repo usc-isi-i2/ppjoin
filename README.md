@@ -32,7 +32,7 @@ Example:
 import ppjoin
 
 def tokenizer(record):
-    return ppjoin.whitespace_tokenizer(record.lower())
+    return set(ppjoin.whitespace_tokenizer(record.lower()))
 
 
 ds0 = ['a b d', 'a b c', 'h k']
@@ -80,6 +80,10 @@ python setup.py
 
 ## Test
 
+To run all unit tests:
+
 ```
 python -m unittest discover ppjoin/tests
 ```
+
+> Tests on real world dataset Abt-Buy is from [DBGroup of Leipzig](https://dbs.uni-leipzig.de/research/projects/object_matching/benchmark_datasets_for_entity_resolution).
