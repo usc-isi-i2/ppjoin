@@ -2,7 +2,7 @@ import ppjoin
 
 
 def tokenizer(record):
-    return ppjoin.whitespace_tokenizer(record.lower())
+    return set(ppjoin.whitespace_tokenizer(record.lower()))
 
 
 ds0 = ['a b d', 'a b c', 'h k']
