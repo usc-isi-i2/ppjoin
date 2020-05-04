@@ -33,7 +33,7 @@ class TestPPJoin(unittest.TestCase):
     @staticmethod
     def run_ppjoin(ds, t):
         result = set()
-        ppjoin_result = ppjoin.ppjoin(ds, t=t)
+        ppjoin_result = ppjoin.join(ds, t=t)
         for r in ppjoin_result:
             ds1_id, r1id = r[0]
             ds2_id, r2id = r[1]

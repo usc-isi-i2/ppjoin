@@ -15,7 +15,7 @@ ds = [
 ]
 
 
-result = ppjoin.ppjoin(ds, t=0.5)
+result = ppjoin.join(ds, t=0.5)
 
 for r in result:
     ds1_id, r1id = r[0]

@@ -134,7 +134,7 @@ def whitespace_tokenizer(x):
     return list(filter(lambda t: t is not None, x.split(' ')))
 
 
-def ppjoin(datasets: List[List[List[str]]], t: float = 0) -> Set[Tuple[Tuple]]:
+def join(datasets: List[List[List[str]]], t: float = 0) -> Set[Tuple[Tuple]]:
 
     ret = set()
     if not datasets:
