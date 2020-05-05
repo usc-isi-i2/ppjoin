@@ -1,7 +1,7 @@
 import unittest
 import collections
 import csv
-import ppjoin
+from ppjoin import ppjoin
 
 
 class TestPPJoin(unittest.TestCase):
