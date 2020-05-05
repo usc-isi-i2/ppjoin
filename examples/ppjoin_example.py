@@ -1,4 +1,4 @@
-import ppjoin
+from ppjoin import ppjoin
 
 
 def tokenizer(record):
