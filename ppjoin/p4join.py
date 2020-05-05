@@ -62,7 +62,7 @@ def base_hash(key, msg, method):
     return int(hmac.new(key=key, msg=msg, digestmod=method).hexdigest(), 16)
 
 
-def encode_record(record, hmac_key, vec_len, k=2):
+def encode_record(record: List[List[str]], hmac_key: str, vec_len: int, k: int = 2) -> List[int]:
     hmac_key = str_to_byte(hmac_key)
     vec = 0
     for t in record:
