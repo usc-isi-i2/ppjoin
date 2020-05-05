@@ -78,15 +78,15 @@ def encode_record(record, hmac_key, vec_len, k=2):
 
 def prefix(vec, vec_len, t):
     sb_idx = all_sb_idx(vec, vec_len)
-    prefix_length = ceil((1 - t) * len(sb_idx)) + 1
-    # prefix_length = len(sb_idx) - ceil(t * len(sb_idx)) + 1
+    # prefix_length = ceil((1 - t) * len(sb_idx)) + 1
+    prefix_length = len(sb_idx) - ceil(t * len(sb_idx)) + 1
     prefix_length = min(prefix_length, len(sb_idx))
     prefix_sb_idx = sb_idx[:prefix_length]
-    prefix_vec = map(lambda x: set_bit(0, prefix_sb_idx[-1]+1, x), prefix_sb_idx[:])
+    prefix_vec = map(lambda x: set_bit(0, vec_len, x), prefix_sb_idx[:])
     return reduce(lambda x, y: x | y, prefix_vec)
 
 
-def compare(records, vec_len, t):
+def compare(records, vec_len, t, order_map):
     cp = set()
     lmap = collections.defaultdict(set)
 
@@ -133,7 +133,7 @@ def positional_filter(xp, yp, xl, yl, t, vec_len):
 
     rest = min(xl - len(sb_idx1) + diff1, yl - len(sb_idx2) + diff2)
 
-    return overlap + rest < ceil((xl + yl) * t / (t - 1))
+    return overlap + rest < ceil((xl + yl) * t / (t + 1))
 
 
 def preprocess(records, vec_len):
@@ -182,7 +182,7 @@ def join(datasets: List[List[List[str]]], t: float = 0, vec_len: int = 0) -> Set
         dataset_id_offset = dataset_id_offset[:-1]
 
     records_sorted, original_order, order_map = preprocess(dataset, vec_len)
-    result = compare(records_sorted, vec_len, t)
+    result = compare(records_sorted, vec_len, t, order_map)
     for r in result:
         r1id, r2id = r[0], r[1]
         r1id, r2id = original_order[r1id], original_order[r2id]
