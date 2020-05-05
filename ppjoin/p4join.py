@@ -168,7 +168,7 @@ def jaccard(n1, n2, vec_len):
     return 1.0 * len(all_sb_idx(n1 & n2, vec_len)) / len(all_sb_idx(n1 | n2, vec_len))
 
 
-def join(datasets: List[List[List[str]]], t: float = 0, vec_len: int = 0) -> Set[Tuple[Tuple]]:
+def join(datasets: List[List[int]], t: float = 0, vec_len: int = 0) -> Set[Tuple[Tuple]]:
     ret = set()
     if not datasets:
         return ret

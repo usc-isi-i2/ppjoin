@@ -88,10 +88,10 @@ p4join.encode_record(record: List[List[str]], hmac_key: str, vec_len: int, k: in
 ```
 
 
-P4Join's `join` function is similar to PPJoin's, but it take encoded datasets as input. The return format is also identical to PPJoin.
+P4Join's `join` function is similar to PPJoin's but takes encoded datasets as input. The return format is also identical to PPJoin.
 
 ```
-p4join.join(datasets: List[List[[int]]], t: float = 0, vec_len: int = 0) -> Set[Tuple[Tuple]]
+p4join.join(datasets: List[List[int]], t: float = 0, vec_len: int = 0) -> Set[Tuple[Tuple]]
 ```
 
 Example:
