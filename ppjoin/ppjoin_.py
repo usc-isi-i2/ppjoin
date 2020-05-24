@@ -33,6 +33,10 @@ def overlap_constraint(len_s1, len_s2, threshold):
 
 
 def jaccard(a, b):
+    if not isinstance(a, set):
+        a = set(a)
+    if not isinstance(b, set):
+        b = set(b)
     return 1.0 * len(a & b) / len(a | b)
 
 
