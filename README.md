@@ -1,4 +1,4 @@
-# PPJoin
+# PPJoin [![doi](https://zenodo.org/badge/DOI/10.5281/zenodo.3924703.svg)](https://doi.org/10.5281/zenodo.3924703)
 
 PPJoin and P4Join Python 3 implementation.
 
