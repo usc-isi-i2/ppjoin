@@ -111,7 +111,8 @@ def compare(records, vec_len, t, order_map):
                 if positional_filter(xp, yp, xl, yl, t, vec_len):
                     continue
 
-                if jaccard(xr, yr, vec_len) >= t:
+                score = jaccard(xr, yr, vec_len)
+                if score >= t:
                     cp.add((xr_idx, yr_idx))
 
         lmap[xl].add((xr_idx, xr))
@@ -183,6 +184,7 @@ def join(datasets: List[List[int]], t: float = 0, vec_len: int = 0) -> Set[Tuple
 
     records_sorted, original_order, order_map = preprocess(dataset, vec_len)
     result = compare(records_sorted, vec_len, t, order_map)
+
     for r in result:
         r1id, r2id = r[0], r[1]
         r1id, r2id = original_order[r1id], original_order[r2id]
@@ -201,6 +203,7 @@ def join(datasets: List[List[int]], t: float = 0, vec_len: int = 0) -> Set[Tuple
 
         ret.add((
             (dataset_id_offset.index(ds1_offset), r1id - ds1_offset),
-            (dataset_id_offset.index(ds2_offset), r2id - ds2_offset)))
+            (dataset_id_offset.index(ds2_offset), r2id - ds2_offset)
+        ))
 
     return ret
