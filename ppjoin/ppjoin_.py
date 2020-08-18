@@ -126,12 +126,17 @@ def preprocess(records):
 #     return [w for same_words in wwi for w in same_words]
 
 
-def qgram_tokenizer(x, _q, keep_start_and_end=False):
-    if keep_start_and_end:
-        x = '_{}_'.format(x.lower())
-    if len(x) < _q:
-        return [x]
-    return [x[i:i+_q] for i in range(len(x)-_q+1)]
+def qgram_tokenizer(n, s, place_holder=' ', padded=False):
+    if len(s) == 0:
+        return []
+    if padded:
+        pad = place_holder * (n - 1)
+        s = pad + s + pad
+    s = s.split(' ')
+    s = place_holder.join(s)
+    if len(s) < n:
+        return [s]
+    return [s[i:i + n] for i in range(len(s) - n + 1)]
 
 
 def whitespace_tokenizer(x):

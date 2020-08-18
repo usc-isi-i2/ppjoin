@@ -46,7 +46,7 @@ class TestPPJoin(unittest.TestCase):
 
     @staticmethod
     def trigram_tokenizer(r):
-        return set(ppjoin.qgram_tokenizer(r.lower(), 3, True))
+        return set(ppjoin.qgram_tokenizer(3, r.lower(), padded=True))
 
     def test_correctness(self):
         raw_datasets = [
